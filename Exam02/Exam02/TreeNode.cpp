@@ -45,9 +45,15 @@ std::vector<TreeNode*> TreeNode::getChildren() { return children; }
 
 std::vector<char> TreeNode::getLetters() { return letters; }
 
-// pushes an entire word onto the tree, starting from the current parent
-void TreeNode::push(std::string word, int depth)
+bool TreeNode::push(std::string word)
 {
+	return push(word, 0); // begins pushing from the root node if it can
+}
+
+// pushes an entire word onto the tree, starting from the current parent
+bool TreeNode::push(std::string word, int depth)
+{
+
 	for (int i = 0; i < letters.size(); i++) // loop through all letters in the current node
 	{
 		if (letters.at(i) == word[depth]) // if the letter is found, search to the end of it
@@ -60,7 +66,14 @@ void TreeNode::push(std::string word, int depth)
 	letters.push_back(word[depth]);
 
 	TreeNode* newNode = new TreeNode(word[depth]);
-	children.push_back(newNode);
+	children.push_back(newNode); // pushes a new child onto the current node's vector
+
+	if (depth == word.length() - 1)
+	{
+		return true;
+	}
+
+	return newNode->push(word, depth+1); // pushes the rest of the word onto the next node to continue building
 }
 
 
