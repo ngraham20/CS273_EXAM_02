@@ -14,7 +14,7 @@ int main()
 	//root->push("%"); // should not show up on the register
 	//root->push("&hello"); // should not show up on the register
 
-	std::string filename = ".\\words.txt";
+	std::string filename = ".\\word.txt";
 	root->readFile(filename.c_str());
 
 	return 0;

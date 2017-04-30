@@ -18,7 +18,6 @@ public:
 
 	bool push(std::string word);
 
-	// TODO this method will read all strings from the file and push them to the tree
 	bool readFile(std::string file);
 
 

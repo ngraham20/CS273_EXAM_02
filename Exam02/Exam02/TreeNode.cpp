@@ -34,12 +34,6 @@ std::string TreeNode::search(TreeNode * node, std::string word)
 	return search(node, word, 0); // calls the search function with a default depth of 0
 }
 
-char TreeNode::getLetter() { return letter; }
-
-std::vector<TreeNode*> TreeNode::getChildren() { return children; }
-
-std::vector<char> TreeNode::getLetters() { return letters; }
-
 bool TreeNode::push(std::string word)
 {
 	return push(word, 0); // begins pushing from the root node if it can
@@ -74,6 +68,13 @@ bool TreeNode::readFile(std::string file)
 // pushes an entire word onto the tree, starting from the current parent
 bool TreeNode::push(std::string word, int depth)
 {
+	// checks the base case before continuing, in case the word already exists in the tree
+	if (depth == word.length())
+	{
+		// base case, we have found the word; print it
+		return true;
+	}
+
 	// makes sure that all letters are valid letters
 	for (int i = 0; i < word.size(); i++)
 	{
@@ -97,14 +98,15 @@ bool TreeNode::push(std::string word, int depth)
 	TreeNode* newNode = new TreeNode(word[depth]);
 	children.push_back(newNode); // pushes a new child onto the current node's vector
 
-	if (depth == word.length() - 1)
-	{
-		return true; // base case, we have found the word
-	}
-
 	return newNode->push(word, depth + 1); // pushes the rest of the word onto the next node to continue building
 	
 }
+
+char TreeNode::getLetter() { return letter; }
+
+std::vector<TreeNode*> TreeNode::getChildren() { return children; }
+
+std::vector<char> TreeNode::getLetters() { return letters; }
 
 
 TreeNode::~TreeNode()
