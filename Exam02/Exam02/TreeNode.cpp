@@ -11,22 +11,37 @@ TreeNode::TreeNode(char letter)
 	this->letter = letter;
 }
 
-std::string TreeNode::search(TreeNode * node, std::string word, int depth) // TODO fix this to comply with PDF
+std::string TreeNode::search(TreeNode * node, std::string word, int depth) // returns a specific word
 {
-		if (depth == word.length()) // base case, if this node is the last in the word
-		{
-			return std::to_string(letter); // return this letter through to the recursion
-		}
+	
 
-		for (int i = 0; i < letters.size(); i++) // loops through the vector of assigned letters
-		{
-			if (letters.at(i) == word[depth]) // if the letter exists
-			{
-				TreeNode* newNode = children.at(i); // search the node at the same index
-				return letter + search(newNode, word, depth + 1); // returns the letter of the current node,
-																  // plus that of the next node
-			}
-		}
+
+
+
+
+
+
+
+
+
+
+
+
+	//if (depth == word.length()) // base case, if this node is the last in the word
+		//{
+		//	return std::to_string(letter); // return this letter through to the recursion
+		//}
+
+		//for (int i = 0; i < letters.size(); i++) // loops through the vector of assigned letters
+		//{
+		//	if (letters.at(i) == word[depth]) // if the letter exists
+		//	{
+		//		return letter + search(children.at(i), word, depth + 1); // returns the letter of the current node,
+		//														  // plus that of the next node
+		//	}
+		//}
+
+	return std::string();
 }
 
 std::string TreeNode::search(TreeNode * node, std::string word)
@@ -100,6 +115,22 @@ bool TreeNode::push(std::string word, int depth)
 
 	return newNode->push(word, depth + 1); // pushes the rest of the word onto the next node to continue building
 	
+}
+
+std::vector<std::string> TreeNode::find(std::string substring)
+{
+	if (letters.size() == 0) // there are no nodes in the root
+	{
+		return std::vector<std::string> {}; // returns an empty vector
+	}
+
+	for (int i = 0; i < letters.size(); i++)
+	{
+		TreeNode* node = children.at(i);
+
+		search(node, substring + node->letters.at(i));
+	}
+
 }
 
 char TreeNode::getLetter() { return letter; }

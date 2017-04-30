@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <string>
 #include "TreeNode.h"
 #include "WordNode.h"
 
@@ -16,6 +18,8 @@ int main()
 
 	std::string filename = ".\\word.txt";
 	root->readFile(filename.c_str());
+
+	std::vector<std::string> wordList = root->find("th");
 
 	return 0;
 }
