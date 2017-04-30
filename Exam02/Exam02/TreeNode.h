@@ -8,7 +8,7 @@ class TreeNode
 public:
 
 	TreeNode();
-	TreeNode(char); // creates a TreeNode with a default letter
+
 	std::string search(TreeNode* node, std::string word);
 
 	char getLetter();
@@ -17,7 +17,8 @@ public:
 
 	bool push(std::string word);
 
-
+	// TODO this method will read all strings from the file and push them to the tree
+	bool readFile(std::string file);
 
 
 
@@ -25,7 +26,10 @@ public:
 
 private:
 
+	TreeNode(char); // creates a TreeNode with a default letter
+
 	bool push(std::string word, int depth);
+
 	std::string search(TreeNode* node, std::string word, int depth);
 
 	std::vector<TreeNode*> children; // a vector of all the children this node has

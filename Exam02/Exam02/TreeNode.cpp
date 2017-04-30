@@ -11,7 +11,7 @@ TreeNode::TreeNode(char letter)
 	this->letter = letter;
 }
 
-std::string TreeNode::search(TreeNode * node, std::string word, int depth)
+std::string TreeNode::search(TreeNode * node, std::string word, int depth) // TODO fix this to comply with PDF
 {
 		if (depth == word.length()) // base case, if this node is the last in the word
 		{
@@ -27,11 +27,6 @@ std::string TreeNode::search(TreeNode * node, std::string word, int depth)
 																  // plus that of the next node
 			}
 		}
-		// if neither of the cases above return a value, it must not exist,
-		// therefore we will push the rest of the word onto the tree and then return
-
-		push(word.substr(depth, word.length()), depth); // pushes the rest of the word onto the tree,
-												 // starting from the current node
 }
 
 std::string TreeNode::search(TreeNode * node, std::string word)
@@ -50,15 +45,28 @@ bool TreeNode::push(std::string word)
 	return push(word, 0); // begins pushing from the root node if it can
 }
 
+bool TreeNode::readFile(std::string file)
+{
+	return false;
+}
+
 // pushes an entire word onto the tree, starting from the current parent
 bool TreeNode::push(std::string word, int depth)
 {
+	// makes sure that all letters are valid letters
+	for (int i = 0; i < word.size(); i++)
+	{
+		if (word[i] < 'a' || word[i] > 'z') // makes sure all letters in the array are valid lowercase letters
+		{
+			return false; // if this loop finds a non lowercase letter or a symbol, it returns out
+		}
+	}
 
 	for (int i = 0; i < letters.size(); i++) // loop through all letters in the current node
 	{
 		if (letters.at(i) == word[depth]) // if the letter is found, search to the end of it
 		{
-			search(children.at(i), word, depth + 1);
+			return children.at(i)->push(word, depth + 1);
 		}
 	}
 
@@ -73,7 +81,8 @@ bool TreeNode::push(std::string word, int depth)
 		return true;
 	}
 
-	return newNode->push(word, depth+1); // pushes the rest of the word onto the next node to continue building
+	return newNode->push(word, depth + 1); // pushes the rest of the word onto the next node to continue building
+	
 }
 
 
