@@ -4,49 +4,36 @@
 
 TreeNode::TreeNode() // creates the root
 {
+	isWordEnd = false;
 }
 
 TreeNode::TreeNode(char letter)
 {
 	this->letter = letter;
+	this->isWordEnd = false;
 }
 
-std::string TreeNode::search(TreeNode * node, std::string word, int depth) // returns a specific word
+TreeNode* TreeNode::search(TreeNode * node, std::string word, int depth) // returns a specific word
 {
-	
+	if (depth == word.length()) // base case, if this node is the last in the word
+		{
+			return node; // return the node
+		}
 
+		for (int i = 0; i < node->letters.size(); i++) // loops through the vector of assigned letters to find the 
+		{										 // desired letter
 
-
-
-
-
-
-
-
-
-
-
-
-	//if (depth == word.length()) // base case, if this node is the last in the word
-		//{
-		//	return std::to_string(letter); // return this letter through to the recursion
-		//}
-
-		//for (int i = 0; i < letters.size(); i++) // loops through the vector of assigned letters
-		//{
-		//	if (letters.at(i) == word[depth]) // if the letter exists
-		//	{
-		//		return letter + search(children.at(i), word, depth + 1); // returns the letter of the current node,
-		//														  // plus that of the next node
-		//	}
-		//}
-
-	return std::string();
+			if (node->letters.at(i) == word[depth]) // if the letter exists
+			{
+				return search(node->children.at(i), word, depth + 1); // returns the letter of the current node,
+																  // plus that of the next node
+			}
+		}
 }
 
-std::string TreeNode::search(TreeNode * node, std::string word)
+TreeNode* TreeNode::search(TreeNode * node, std::string word)
 {
-	return search(node, word, 0); // calls the search function with a default depth of 0
+	return search(node, word, 0); // calls the search function from the current "root"
 }
 
 bool TreeNode::push(std::string word)
@@ -64,10 +51,9 @@ bool TreeNode::readFile(std::string file)
 	{
 		while (!input.eof()) // loops through all words
 		{
-			std::string word = "";
+			std::string word;
 			input >> word;
 			push(word);
-			std::cout << word << std::endl;
 		}
 		input.close();
 		return true;
@@ -80,16 +66,32 @@ bool TreeNode::readFile(std::string file)
 
 }
 
+std::vector<std::string> TreeNode::find(std::string substring)
+{
+	TreeNode* node = search(substring); // finds the node for the last letter in the substring
+
+	std::vector<std::string> vec;
+
+	node->find(vec, substring.substr(0,substring.size()-1)); // begining from node, find ALL words, putting them into a vector
+
+	return vec;
+}
+
+std::vector<std::string> TreeNode::findAll()
+{
+	std::vector<std::string> vec;
+
+	for (int i = 0; i < letters.size(); i++) // loop through all letters
+	{
+		children.at(i)->find(vec, "");
+	}
+
+	return vec;
+}
+
 // pushes an entire word onto the tree, starting from the current parent
 bool TreeNode::push(std::string word, int depth)
 {
-	// checks the base case before continuing, in case the word already exists in the tree
-	if (depth == word.length())
-	{
-		// base case, we have found the word; print it
-		return true;
-	}
-
 	// makes sure that all letters are valid letters
 	for (int i = 0; i < word.size(); i++)
 	{
@@ -97,6 +99,14 @@ bool TreeNode::push(std::string word, int depth)
 		{
 			return false; // if this loop finds a non lowercase letter or a symbol, it returns out
 		}
+	}
+
+	// checks the base case before continuing, in case the word already exists in the tree
+	if (depth == word.length())
+	{
+		// base case, we have found the word
+		this->isWordEnd = true;
+		return true;
 	}
 
 	for (int i = 0; i < letters.size(); i++) // loop through all letters in the current node
@@ -117,20 +127,29 @@ bool TreeNode::push(std::string word, int depth)
 	
 }
 
-std::vector<std::string> TreeNode::find(std::string substring)
+TreeNode * TreeNode::search(std::string word)
 {
-	if (letters.size() == 0) // there are no nodes in the root
-	{
-		return std::vector<std::string> {}; // returns an empty vector
-	}
-
 	for (int i = 0; i < letters.size(); i++)
 	{
-		TreeNode* node = children.at(i);
+		if (letters.at(i) == word[0]) // if the root contains the first letter in the target word
+		{
+			return search(children.at(i), word, 1); // begin the search for the target word, begining with the next letter
+		}
+	}
+	return nullptr;
+}
 
-		search(node, substring + node->letters.at(i));
+void TreeNode::find(std::vector<std::string> &vec, std::string substring)
+{
+	if (isWordEnd) // found a word, push it on
+	{
+		vec.push_back(substring + letter);
 	}
 
+	for (int i = 0; i < letters.size(); i++) // loop through all children
+	{
+		children.at(i)->find(vec, substring + letter); // find the children
+	}
 }
 
 char TreeNode::getLetter() { return letter; }

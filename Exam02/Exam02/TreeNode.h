@@ -19,18 +19,23 @@ public:
 	bool readFile(std::string file);
 
 	std::vector<std::string> find(std::string substring);
+	std::vector<std::string> findAll();
 
 	~TreeNode();
 
 private:
 
+	void find(std::vector<std::string> &vec, std::string substring);
+
 	TreeNode(char); // creates a TreeNode with a default letter
 
 	bool push(std::string word, int depth);
 
-	std::string search(TreeNode* node, std::string word, int depth);
+	TreeNode* search(std::string word); // searches from the root
 
-	std::string search(TreeNode* node, std::string substring); // this will only be used internally
+	TreeNode* search(TreeNode* node, std::string word, int depth);
+
+	TreeNode* search(TreeNode* node, std::string substring); // this will only be used internally
 
 	// std::vector<std::string> find(std::string substring);
 
@@ -38,6 +43,8 @@ private:
 	std::vector<char> letters; // a vector of the letters of the children this node has
 
 	char letter; // this is the letter contained by this node
+
+	bool isWordEnd;
 
 	enum exceptions
 	{
