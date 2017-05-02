@@ -1,6 +1,7 @@
 #include "TreeNode.h"
 
 
+int TreeNode::wordCount = 0;
 
 TreeNode::TreeNode() // creates the root
 {
@@ -29,6 +30,7 @@ TreeNode* TreeNode::search(TreeNode * node, std::string word, int depth) // retu
 																  // plus that of the next node
 			}
 		}
+		return nullptr;
 }
 
 TreeNode* TreeNode::search(TreeNode * node, std::string word)
@@ -54,6 +56,9 @@ bool TreeNode::readFile(std::string file)
 			std::string word;
 			input >> word;
 			push(word);
+
+			wordCount++;
+			std::cout << "[" << std::to_string(wordCount) << "] Added: " << word << std::endl;
 		}
 		input.close();
 		return true;

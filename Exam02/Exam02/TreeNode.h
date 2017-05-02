@@ -25,6 +25,8 @@ public:
 
 private:
 
+	static int wordCount;
+
 	void find(std::vector<std::string> &vec, std::string substring);
 
 	TreeNode(char); // creates a TreeNode with a default letter

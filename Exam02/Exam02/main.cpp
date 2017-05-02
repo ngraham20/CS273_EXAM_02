@@ -8,47 +8,51 @@ int main()
 {
 	TreeNode* root = new TreeNode(); // creates the root node
 
-	//root->push("hike");
-	//root->push("hill");
-	//root->push("trail");
-	//root->push("the");
-
-	//root->push("%"); // should not show up on the register
-	//root->push("&hello"); // should not show up on the register
-
-	std::string filename = ".\\word.txt";
-	root->readFile(filename.c_str());
-
-	std::cout << "All words have been added!" << std::endl;
-	std::cout << "(1): Search for a subword" << std::endl;
-	std::cout << "(2): Quit" << std::endl;
-	std::cout << ">>";
-
-	std::string input;
-	std::cin >> input;
-
 	std::vector<std::string> wordList;
 
-	if (input != "2")
+	std::string input;
+
+	do
 	{
-		std::cout << "Type the subword (without capital letters) that you would like to search for, or type 'all' to print all words." << std::endl;
+		std::cout << "---------------------------------------" << std::endl;
+		std::cout << "Welcome to the word processing program!" << std::endl;
+		std::cout << "(1): Add words to system" << std::endl;
+		std::cout << "(2): Search for a subword" << std::endl;
+		std::cout << "(3): Quit" << std::endl;
+		std::cout << "---------------------------------------" << std::endl;
+		std::cout << ">>";
 		std::cin >> input;
 
-		if (input != "all")
+		if (input == "1")
 		{
-			wordList = root->find(input);
-		}
+			std::cout << "Type the name of the file you would like to import" << std::endl;
+			std::cout << ">>";
+			std::cin >> input;
 
-		else if (input == "all")
-		{
-			wordList = root->findAll();
+			std::string filename = ".\\" + input;
+			root->readFile(filename.c_str());
 		}
-	}
-		std::cout << "------------------------------------" << std::endl;
-		for (int i = 0; i < wordList.size(); i++)
+		if (input == "2")
 		{
-			std::cout << wordList.at(i) << std::endl;
+			std::cout << "Type the subword you would like to search or type 'all' to return all words." << std::endl;
+			std::cout << ">>";
+			std::cin >> input;
+			std::cout << "------------------------------------" << std::endl;
+
+			if (input == "all")
+			{
+				wordList = root->findAll();
+			}
+			else
+				wordList = root->find(input);
+
+			std::cout << "------------------------------------" << std::endl;
+			for (int i = 0; i < wordList.size(); i++)
+			{
+				std::cout << wordList.at(i) << std::endl;
+			}
+			std::cout << "------------------------------------" << std::endl;
 		}
-		std::cout << "------------------------------------" << std::endl;
+	} while (input != "3");
 	return 0;
 }
